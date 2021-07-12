@@ -2,8 +2,6 @@ package org.example.cpuv2;
 
 import org.example.gui.components.SwingDisplay;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
