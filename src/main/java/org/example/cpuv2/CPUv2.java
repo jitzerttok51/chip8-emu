@@ -95,6 +95,7 @@ public class CPUv2 {
             case LDRD: loadRegisterDump(opcode);  break;
             case STRD: storeRegisterDump(opcode); break;
             case LDSA: loadSpriteAddress(opcode); break;
+            case STDR: binaryCodedDec(opcode);    break;
             case USI:
             default:
                 throw new IllegalStateException("Unsupported instruction "+instruction.toString()
@@ -259,6 +260,19 @@ public class CPUv2 {
         var reg = getRegisterX(opcode);
         var regVal = registers.getDelayTimer();
         registers.setRegister(reg, regVal);
+    }
+
+    private void binaryCodedDec(short opcode) {
+        var regX =  getRegisterX(opcode);
+        var val = registers.getRegister(regX);
+        var x = Byte.toUnsignedInt(val);
+        var f = (byte) (x / 100);
+        var s = (byte) (x / 10 % 10);
+        var t = (byte) (x % 10);
+        var I = registers.getI();
+        memory.write(I, f);
+        memory.write(I + 1, s);
+        memory.write(I + 2, t);
     }
 
     private void loadSpriteAddress(short opcode) {
