@@ -96,6 +96,9 @@ public class CPUv2 {
             case STRD: storeRegisterDump(opcode); break;
             case LDSA: loadSpriteAddress(opcode); break;
             case STDR: binaryCodedDec(opcode);    break;
+            case LDKP: waitForKeyPress(opcode);   break;
+            case SKP:  skIfKeyPressed(opcode);    break;
+            case SKNP: skIfKeyNotPressed(opcode); break;
             case USI:
             default:
                 throw new IllegalStateException("Unsupported instruction "+instruction.toString()
@@ -299,6 +302,35 @@ public class CPUv2 {
         for(int i=0; i<=registerRange; i++) {
             var res = registers.getRegister(i);
             memory.write(I+i, res);
+        }
+    }
+
+    private void waitForKeyPress(short opcode) {
+        var regX =  getRegisterX(opcode);
+        var key = controls.waitForKeyPress();
+        if(key<0) {
+            var PC = registers.getPC();
+            registers.setPC((short) (PC - 2));
+        } else {
+            registers.setRegister(regX, key);
+        }
+    }
+
+    private void skIfKeyPressed(short opcode) {
+        var regX =  getRegisterX(opcode);
+        var val = registers.getRegister(regX);
+        if(controls.isKeyPressed(val)) {
+            registers.getAndIncPC();
+            registers.getAndIncPC();
+        }
+    }
+
+    private void skIfKeyNotPressed(short opcode) {
+        var regX =  getRegisterX(opcode);
+        var val = registers.getRegister(regX);
+        if(controls.isKeyNotPressed(val)) {
+            registers.getAndIncPC();
+            registers.getAndIncPC();
         }
     }
 
