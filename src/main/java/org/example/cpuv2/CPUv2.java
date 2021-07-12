@@ -57,9 +57,14 @@ public class CPUv2 {
     }
 
     private void runInt() {
-        var opcode = fetch();
-        var instruction = Instructions.decode(opcode);
-        execute(instruction, opcode);
+        try {
+            var opcode = fetch();
+            var instruction = Instructions.decode(opcode);
+            execute(instruction, opcode);
+        } catch (Exception e) {
+            this.halt();
+            e.printStackTrace();
+        }
     }
 
     private short fetch() {
@@ -70,21 +75,26 @@ public class CPUv2 {
 
     private void execute(Instructions instruction, short opcode) {
         switch (instruction) {
-            case CLS:  clearScreen(opcode);      break;
-            case LDA:  loadAddress(opcode);      break;
-            case SET:  setRegister(opcode);      break;
-            case DRAW: draw(opcode);             break;
-            case ADD:  addRegister(opcode);      break;
-            case JMP:  jump(opcode);             break;
-            case SE:   skipEquals(opcode);       break;
-            case SNE:  skipNotEquals(opcode);    break;
-            case ADDA: addAddress(opcode);       break;
-            case CALL: call(opcode);             break;
-            case RET:  ret(opcode);              break;
-            case STDT: storeInDelayReg(opcode);  break;
-            case STST: storeInSoundReg(opcode);  break;
-            case LDDT: loadFromDelayReg(opcode); break;
-            case ADDR: addRegisters(opcode);     break;
+            case CLS:  clearScreen(opcode);       break;
+            case LDA:  loadAddress(opcode);       break;
+            case SET:  setRegister(opcode);       break;
+            case DRAW: draw(opcode);              break;
+            case ADD:  addRegister(opcode);       break;
+            case JMP:  jump(opcode);              break;
+            case SE:   skipEquals(opcode);        break;
+            case SNE:  skipNotEquals(opcode);     break;
+            case ADDA: addAddress(opcode);        break;
+            case CALL: call(opcode);              break;
+            case RET:  ret(opcode);               break;
+            case STDT: storeInDelayReg(opcode);   break;
+            case STST: storeInSoundReg(opcode);   break;
+            case LDDT: loadFromDelayReg(opcode);  break;
+            case ADDR: addRegisters(opcode);      break;
+            case SHL:  shiftLeft(opcode);         break;
+            case SHR:  shiftRight(opcode);        break;
+            case LDRD: loadRegisterDump(opcode);  break;
+            case STRD: storeRegisterDump(opcode); break;
+            case LDSA: loadSpriteAddress(opcode); break;
             case USI:
             default:
                 throw new IllegalStateException("Unsupported instruction "+instruction.toString()
@@ -175,6 +185,30 @@ public class CPUv2 {
         registers.setRegister(regX, (byte) result);
     }
 
+    private void shiftRight(short opcode) {
+        var regX = getRegisterX(opcode);
+        var x = registers.getRegister(regX);
+
+        registers.setRegister(0xF, (byte) 0);
+        if((x & 0x01) != 0) {
+            registers.setRegister(0xF, (byte) 1);
+        }
+        var res = (byte) (Byte.toUnsignedInt(x) >> 1);
+        registers.setRegister(regX, res);
+    }
+
+    private void shiftLeft(short opcode) {
+        var regX = getRegisterX(opcode);
+        var x = registers.getRegister(regX);
+
+        registers.setRegister(0xF, (byte) 0);
+        if((x & 0x80) != 0) {
+            registers.setRegister(0xF, (byte) 1);
+        }
+        var res = (byte) (Byte.toUnsignedInt(x) << 1);
+        registers.setRegister(regX, res);
+    }
+
     private void draw(short opcode) {
         var n = opcode & 0x000F;
         byte registerX = getRegisterX(opcode);
@@ -225,6 +259,33 @@ public class CPUv2 {
         var reg = getRegisterX(opcode);
         var regVal = registers.getDelayTimer();
         registers.setRegister(reg, regVal);
+    }
+
+    private void loadSpriteAddress(short opcode) {
+        var regX =  getRegisterX(opcode);
+        var val = registers.getRegister(regX);
+        var res = (short) (val * 5);
+        registers.setI(res);
+    }
+
+    private void loadRegisterDump(short opcode) {
+        var registerRange =  getRegisterX(opcode);
+        var I = registers.getI();
+
+        for(int i=0; i<=registerRange; i++) {
+            var res = memory.read(I+i);
+            registers.setRegister(i, res);
+        }
+    }
+
+    private void storeRegisterDump(short opcode) {
+        var registerRange =  getRegisterX(opcode);
+        var I = registers.getI();
+
+        for(int i=0; i<=registerRange; i++) {
+            var res = registers.getRegister(i);
+            memory.write(I+i, res);
+        }
     }
 
     // Helpers

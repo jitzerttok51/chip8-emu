@@ -61,7 +61,7 @@ public enum Instructions {
                 case 0x5: return SUB;
                 case 0x6: return SHR;
                 case 0x7: return SUBR;
-                case 0x8: return SHL;
+                case 0xE: return SHL;
                 default: return USI;
             }
             case 0x9000: return SNER;
