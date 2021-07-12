@@ -28,7 +28,7 @@ public class CPUBuilder {
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
 
-    private static final int REFRESH_RATE = 600; //Hz
+    private static final int REFRESH_RATE = 60; //Hz
 
     public static CPUv2 build(byte[] rom) {
         var memory = new Memory();
