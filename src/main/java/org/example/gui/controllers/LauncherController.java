@@ -1,13 +1,10 @@
 package org.example.gui.controllers;
 
-import org.example.core.CPU;
-import org.example.cpuv2.CPUBuilder;
+import org.example.core.CPUBuilder;
 import org.example.gui.components.SwingDisplay;
 import org.example.gui.panels.LauncherPanel;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 

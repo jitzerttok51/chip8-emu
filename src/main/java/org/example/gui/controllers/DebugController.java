@@ -1,9 +1,8 @@
 package org.example.gui.controllers;
 
-import org.example.core.CPU;
 import org.example.core.CPUAgent;
 import org.example.core.CPUAgentContext;
-import org.example.cpuv2.CPUBuilder;
+import org.example.core.CPUBuilder;
 import org.example.gui.components.SwingDisplay;
 import org.example.gui.panels.DebugPanel;
 import org.example.utils.Utils;

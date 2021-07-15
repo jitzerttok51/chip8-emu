@@ -1,6 +1,6 @@
 import org.example.core.*;
-import org.example.cpuv2.CPUBuilder;
-import org.example.cpuv2.CPUv2;
+import org.example.core.CPUBuilder;
+import org.example.core.CPUv2;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

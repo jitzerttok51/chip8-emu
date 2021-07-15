@@ -1,4 +1,4 @@
-package org.example.cpuv2;
+package org.example.core;
 
 import org.example.gui.components.SwingDisplay;
 

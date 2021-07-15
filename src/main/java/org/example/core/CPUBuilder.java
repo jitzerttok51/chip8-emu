@@ -1,7 +1,5 @@
-package org.example.cpuv2;
+package org.example.core;
 
-import org.example.core.Controls;
-import org.example.core.Display;
 import org.example.gui.components.SwingDisplay;
 import org.example.utils.Utils;
 

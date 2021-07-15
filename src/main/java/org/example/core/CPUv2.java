@@ -1,9 +1,4 @@
-package org.example.cpuv2;
-
-import org.example.core.CPUAgent;
-import org.example.core.CPUAgentContext;
-import org.example.core.Controls;
-import org.example.core.Display;
+package org.example.core;
 
 import java.util.*;
 import java.util.function.Supplier;
