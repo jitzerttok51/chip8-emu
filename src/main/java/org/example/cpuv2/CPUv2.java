@@ -1,10 +1,11 @@
 package org.example.cpuv2;
 
+import org.example.core.CPUAgent;
+import org.example.core.CPUAgentContext;
 import org.example.core.Controls;
 import org.example.core.Display;
 
-import java.util.ArrayDeque;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class CPUv2 {
@@ -20,6 +21,7 @@ public class CPUv2 {
     private final Random random = new Random();
 
     private final ArrayDeque<Short> stack = new ArrayDeque<>();
+    private final List<CPUAgent> agents = new ArrayList<>();
 
 
     public CPUv2(Registers registers, Memory memory, Clock clock, Clock soundClock, Clock delayClock, Display display, Controls controls) {
@@ -63,6 +65,7 @@ public class CPUv2 {
             var opcode = fetch();
             var instruction = Instructions.decode(opcode);
             execute(instruction, opcode);
+            updateAgents(opcode);
         } catch (Exception e) {
             this.halt();
             e.printStackTrace();
@@ -73,6 +76,10 @@ public class CPUv2 {
         byte upper = memory.read(registers.getAndIncPC());
         byte lower = memory.read(registers.getAndIncPC());
         return (short)((Byte.toUnsignedInt(upper) << 8) + Byte.toUnsignedInt(lower));
+    }
+
+    public void addAgents(CPUAgent ...agent) {
+        agents.addAll(Arrays.asList(agent));
     }
 
     private void execute(Instructions instruction, short opcode) {
@@ -465,5 +472,49 @@ public class CPUv2 {
 
     private byte getValue(short opcode) {
         return (byte) (opcode & 0x00FF);
+    }
+
+    private void updateAgents(short opcode) {
+        for(var agent : agents) {
+            var ctx = new Context(opcode);
+            agent.postCycle(ctx);
+            if(agent.isHalt()) {
+                halt();
+            }
+        }
+    }
+
+    private class Context implements CPUAgentContext {
+
+        private final short opcode;
+
+        private Context(short opcode) {
+            this.opcode = opcode;
+        }
+
+        @Override
+        public byte[] getMemorySnapshot() {
+            return memory.snapshot();
+        }
+
+        @Override
+        public byte getRegisterValue(int v) {
+            return registers.getRegister(v);
+        }
+
+        @Override
+        public short getIRegisterValue() {
+            return registers.getI();
+        }
+
+        @Override
+        public short getPCRegisterValue() {
+            return registers.getPC();
+        }
+
+        @Override
+        public short getCurrentOpcode() {
+            return 0;
+        }
     }
 }

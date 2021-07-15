@@ -3,6 +3,7 @@ package org.example.gui.controllers;
 import org.example.core.CPU;
 import org.example.core.CPUAgent;
 import org.example.core.CPUAgentContext;
+import org.example.cpuv2.CPUBuilder;
 import org.example.gui.components.SwingDisplay;
 import org.example.gui.panels.DebugPanel;
 import org.example.utils.Utils;
@@ -74,7 +75,8 @@ public class DebugController {
         panel.setGeneralRegisters(new byte[0xF], (short) 0,(short) 0);
         var agent = new CPUDebugAgent();
         var display = new SwingDisplay(panel);
-        var cpu = new CPU(Utils.shortArrToBytes(rom), display, display, agent);
+        var cpu = CPUBuilder.build(Utils.shortArrToBytes(rom), display, display);
+        cpu.addAgents(agent);
         update(()->panel.setJumpToLine(0));
         update(panel::greenLight);
         cpu.run();

@@ -1,5 +1,7 @@
 package org.example.cpuv2;
 
+import org.example.core.Controls;
+import org.example.core.Display;
 import org.example.gui.components.SwingDisplay;
 import org.example.utils.Utils;
 
@@ -28,9 +30,14 @@ public class CPUBuilder {
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
 
-    private static final int REFRESH_RATE = 60; //Hz
+    private static final int REFRESH_RATE = 300; //Hz
 
     public static CPUv2 build(byte[] rom) {
+        var display = new SwingDisplay();
+        return build(rom, display, display);
+    }
+
+    public static CPUv2 build(byte[] rom, Display display, Controls controls) {
         var memory = new Memory();
         memory.insertData(0x200, rom);
         memory.insertData(0, Utils.shortArrAsByte(FONT));
@@ -39,12 +46,11 @@ public class CPUBuilder {
         var mainClock = new Clock(REFRESH_RATE);
         var delayClock =  new Clock(REFRESH_RATE);
         var soundClock =  new Clock(REFRESH_RATE);
-        var display = new SwingDisplay();
 
-        return new CPUv2(
+        return new CPUv2 (
                 registers, memory,
                 mainClock, delayClock, soundClock,
-                display, display);
+                display, controls);
     }
 
     public static CPUv2 build(Path program) throws IOException {

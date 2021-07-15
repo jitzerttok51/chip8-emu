@@ -1,6 +1,7 @@
 package org.example.gui.controllers;
 
 import org.example.core.CPU;
+import org.example.cpuv2.CPUBuilder;
 import org.example.gui.components.SwingDisplay;
 import org.example.gui.panels.LauncherPanel;
 
@@ -50,16 +51,8 @@ public class LauncherController {
 
         thread = new Thread(()->{
             var display = new SwingDisplay(panel);
-            var cpu = new CPU(rom, display, display);
-            display.getFrame().addWindowListener(new WindowAdapter()
-            {
-                @Override
-                public void windowClosing(WindowEvent e)
-                {
-                    cpu.halt();
-                    e.getWindow().dispose();
-                }
-            });
+            var cpu = CPUBuilder.build(rom, display, display);
+            display.exitOnClose(cpu::halt);
             cpu.run();
         });
 

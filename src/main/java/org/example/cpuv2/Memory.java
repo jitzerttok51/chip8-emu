@@ -18,4 +18,10 @@ public class Memory {
     public void insertData(int index, byte[] data) {
         System.arraycopy(data, 0, memory, index, data.length);
     }
+
+    public byte[] snapshot() {
+        var buff = new byte[CAPACITY];
+        System.arraycopy(memory, 0, buff, 0, CAPACITY);
+        return buff;
+    }
 }
