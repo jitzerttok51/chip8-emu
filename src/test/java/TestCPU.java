@@ -1,4 +1,6 @@
 import org.example.core.*;
+import org.example.cpuv2.CPUBuilder;
+import org.example.cpuv2.CPUv2;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -407,7 +409,7 @@ public class TestCPU {
         for(int i=0; i<program.length; i++) {
             addOperation(rom, i, program[i]);
         }
-        CPU cpu = new CPU(rom, new Display() {
+        CPUv2 cpu = CPUBuilder.build(rom, new Display() {
             @Override
             public int getPixel(int x, int y) {
                 return 0;
@@ -432,8 +434,9 @@ public class TestCPU {
             public byte waitForKeyPress() {
                 return 0;
             }
-        }, new TestAgent(testFunc));
+        });
 
+        cpu.addAgents( new TestAgent(testFunc));
         cpu.setRandom(new FakeRandom());
         cpu.run();
     }

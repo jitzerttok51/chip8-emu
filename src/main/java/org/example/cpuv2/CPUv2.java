@@ -18,7 +18,7 @@ public class CPUv2 {
 
     private final Display display;
     private final Controls controls;
-    private final Random random = new Random();
+    private Random random = new Random();
 
     private final ArrayDeque<Short> stack = new ArrayDeque<>();
     private final List<CPUAgent> agents = new ArrayList<>();
@@ -455,6 +455,10 @@ public class CPUv2 {
         if(controls.isKeyNotPressed(val)) {
             registers.skipNextInstruction();
         }
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
     }
 
     // Helpers
