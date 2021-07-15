@@ -1,6 +1,9 @@
-import org.example.core.*;
 import org.example.core.CPUBuilder;
 import org.example.core.CPUv2;
+import org.example.core.agent.CPUAgent;
+import org.example.core.agent.CPUAgentContext;
+import org.example.core.components.Controls;
+import org.example.core.components.Display;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

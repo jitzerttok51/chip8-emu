@@ -1,4 +1,4 @@
-package org.example.core;
+package org.example.core.instructions;
 
 public enum Instructions {
     USI, // Unsupported operation

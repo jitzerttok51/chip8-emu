@@ -1,5 +1,6 @@
 package org.example.core;
 
+import org.example.core.components.*;
 import org.example.gui.components.SwingDisplay;
 import org.example.utils.Utils;
 

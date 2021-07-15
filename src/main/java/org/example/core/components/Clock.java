@@ -1,4 +1,4 @@
-package org.example.core;
+package org.example.core.components;
 
 import java.util.concurrent.*;
 

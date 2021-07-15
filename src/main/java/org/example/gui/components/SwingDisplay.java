@@ -1,7 +1,7 @@
 package org.example.gui.components;
 
-import org.example.core.Controls;
-import org.example.core.Display;
+import org.example.core.components.Controls;
+import org.example.core.components.Display;
 
 import javax.swing.*;
 import java.awt.*;

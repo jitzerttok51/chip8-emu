@@ -1,4 +1,4 @@
-package org.example.core;
+package org.example.core.agent;
 
 public interface CPUAgent {
 
